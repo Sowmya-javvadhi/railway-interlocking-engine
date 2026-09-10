@@ -1,0 +1,1636 @@
+/* =========================================================
+   RAILWAY INTERLOCKING CONTROL CENTRE
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg-main: #050b10;
+    --bg-panel: #0a151c;
+    --bg-card: #0e1d25;
+    --border: #20343e;
+
+    --text-main: #f4f8fa;
+    --text-muted: #8da4ae;
+
+    --cyan: #28d7ff;
+    --green: #35e58a;
+    --yellow: #ffc857;
+    --red: #ff4d5a;
+    --orange: #ff9f43;
+
+    --shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at 20% 10%,
+            rgba(40, 215, 255, 0.06),
+            transparent 30%
+        ),
+        var(--bg-main);
+
+    color: var(--text-main);
+
+    font-family:
+        Inter,
+        Segoe UI,
+        Arial,
+        sans-serif;
+}
+
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.topbar {
+    height: 78px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 32px;
+
+    background: #071117;
+
+    border-bottom: 1px solid var(--border);
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #0d2530;
+
+    border: 1px solid #214452;
+
+    font-size: 25px;
+}
+
+.brand h1 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.brand p {
+    margin-top: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: var(--green);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 0.6px;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow: 0 0 12px var(--green);
+
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.45;
+    }
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.container {
+    width: min(1450px, 94%);
+
+    margin: 0 auto;
+
+    padding: 28px 0 50px;
+}
+
+
+/* =========================================================
+   CONTROL BAR
+   ========================================================= */
+
+.control-bar {
+    min-height: 82px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 18px 22px;
+
+    margin-bottom: 20px;
+
+    background: var(--bg-panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    box-shadow: var(--shadow);
+}
+
+.control-bar h2 {
+    font-size: 20px;
+}
+
+.control-bar p {
+    margin-top: 5px;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   START BUTTON
+   ========================================================= */
+
+.start-button {
+    min-width: 205px;
+
+    padding: 13px 20px;
+
+    border: 1px solid var(--cyan);
+
+    border-radius: 9px;
+
+    background: rgba(40, 215, 255, 0.08);
+
+    color: var(--cyan);
+
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.2s ease;
+}
+
+.start-button:hover:not(:disabled) {
+    background: rgba(40, 215, 255, 0.16);
+
+    box-shadow: 0 0 20px rgba(40, 215, 255, 0.2);
+
+    transform: translateY(-1px);
+}
+
+.start-button:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   METRICS
+   ========================================================= */
+
+.metrics-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+}
+
+.metric-card {
+    min-height: 92px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    background: var(--bg-panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: 13px;
+
+    box-shadow: var(--shadow);
+}
+
+.metric-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #10242d;
+
+    font-size: 22px;
+}
+
+.metric-card span {
+    display: block;
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+}
+
+.metric-card strong {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 24px;
+}
+
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.panel,
+.story-panel {
+    background: var(--bg-panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    box-shadow: var(--shadow);
+
+    overflow: hidden;
+
+    margin-bottom: 20px;
+}
+
+.panel-header {
+    min-height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 16px 20px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-header h2 {
+    font-size: 17px;
+}
+
+.panel-header p {
+    margin-top: 4px;
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   LIVE BADGE
+   ========================================================= */
+
+.live-badge {
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    background: rgba(53, 229, 138, 0.08);
+
+    border: 1px solid rgba(53, 229, 138, 0.35);
+
+    color: var(--green);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 0.6px;
+}
+
+
+/* =========================================================
+   STORY PANEL
+   ========================================================= */
+
+.story-panel {
+    margin-bottom: 20px;
+}
+
+.story-message {
+    min-height: 100px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(40, 215, 255, 0.055),
+            transparent
+        );
+}
+
+.story-icon {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #10252e;
+
+    font-size: 22px;
+}
+
+.story-message strong {
+    font-size: 15px;
+}
+
+.story-message p {
+    margin-top: 5px;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   MAP LEGEND
+   ========================================================= */
+
+.map-legend {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    flex-wrap: wrap;
+}
+
+.map-legend span {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    color: var(--text-muted);
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.legend {
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    display: inline-block;
+}
+
+.legend.free {
+    background: #536872;
+}
+
+.legend.reserved {
+    background: var(--yellow);
+
+    box-shadow: 0 0 8px rgba(255, 200, 87, 0.5);
+}
+
+.legend.occupied {
+    background: var(--green);
+
+    box-shadow: 0 0 8px rgba(53, 229, 138, 0.5);
+}
+
+.legend.conflict {
+    background: var(--red);
+
+    box-shadow: 0 0 8px rgba(255, 77, 90, 0.7);
+}
+
+
+/* =========================================================
+   RAILWAY MAP
+   ========================================================= */
+
+.railway-map {
+    position: relative;
+
+    width: 100%;
+
+    height: 680px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #0b1c25 0%,
+            #071218 48%,
+            #050b10 100%
+        );
+}
+
+
+/* subtle grid */
+
+.railway-map::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   SVG
+   ========================================================= */
+
+.railway-svg {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   TRACKS
+   ========================================================= */
+
+.svg-track {
+    stroke: #3a4e58;
+
+    stroke-width: 10;
+
+    stroke-linecap: round;
+
+    fill: none;
+
+    opacity: 0.8;
+
+    transition:
+        stroke 0.35s ease,
+        stroke-width 0.35s ease,
+        opacity 0.35s ease,
+        filter 0.35s ease;
+}
+
+
+/* railway sleepers */
+
+.svg-track {
+    stroke-dasharray: 1 18;
+}
+
+
+/* FREE */
+
+.svg-track.free {
+    stroke: #3b505a;
+
+    opacity: 0.75;
+}
+
+
+/* RESERVED */
+
+.svg-track.reserved {
+    stroke: var(--yellow);
+
+    stroke-width: 13;
+
+    opacity: 1;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(255, 200, 87, 0.65)
+        );
+
+    animation: reservedTrack 1.2s infinite alternate;
+}
+
+@keyframes reservedTrack {
+    from {
+        opacity: 0.72;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* OCCUPIED */
+
+.svg-track.occupied {
+    stroke: var(--green);
+
+    stroke-width: 14;
+
+    opacity: 1;
+
+    filter:
+        drop-shadow(
+            0 0 11px
+            rgba(53, 229, 138, 0.75)
+        );
+}
+
+
+/* CONFLICT */
+
+.svg-track.conflict {
+    stroke: var(--red);
+
+    stroke-width: 15;
+
+    opacity: 1;
+
+    filter:
+        drop-shadow(
+            0 0 14px
+            rgba(255, 77, 90, 0.9)
+        );
+
+    animation: conflictTrack 0.5s infinite alternate;
+}
+
+@keyframes conflictTrack {
+    from {
+        opacity: 0.65;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   TRACK LABELS
+   ========================================================= */
+
+.track-label {
+    fill: #8ca5af;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+
+    paint-order: stroke;
+
+    stroke: #071218;
+
+    stroke-width: 7px;
+
+    stroke-linejoin: round;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   JUNCTION CONNECTORS
+   ========================================================= */
+
+.junction-connector {
+    stroke: #344952;
+
+    stroke-width: 7;
+
+    stroke-dasharray: 8 8;
+
+    opacity: 0.75;
+}
+
+
+/* =========================================================
+   STATIONS
+   ========================================================= */
+
+.station-node-svg circle {
+    fill: #10232c;
+
+    stroke: #8aa4ae;
+
+    stroke-width: 3;
+
+    transition:
+        fill 0.3s ease,
+        stroke 0.3s ease;
+}
+
+.station-node-svg text {
+    fill: #e7f1f4;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    paint-order: stroke;
+
+    stroke: #071218;
+
+    stroke-width: 7px;
+
+    stroke-linejoin: round;
+}
+
+.station-node-svg .station-id {
+    fill: #6e8792;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    stroke-width: 5px;
+}
+
+
+/* =========================================================
+   JUNCTIONS
+   ========================================================= */
+
+.junction-svg circle {
+    fill: #0b2029;
+
+    stroke: #4e6974;
+
+    stroke-width: 3;
+
+    opacity: 0.95;
+}
+
+.junction-svg text {
+    fill: #c9d9de;
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   SIGNALS
+   ========================================================= */
+
+.svg-signal {
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+}
+
+.svg-signal circle {
+    stroke: #071218;
+
+    stroke-width: 4;
+}
+
+.svg-signal text {
+    font-size: 16px;
+
+    pointer-events: none;
+}
+
+.svg-signal.red circle {
+    fill: rgba(255, 77, 90, 0.9);
+
+    filter:
+        drop-shadow(
+            0 0 7px
+            rgba(255, 77, 90, 0.75)
+        );
+}
+
+.svg-signal.green circle {
+    fill: rgba(53, 229, 138, 0.95);
+
+    filter:
+        drop-shadow(
+            0 0 9px
+            rgba(53, 229, 138, 0.8)
+        );
+}
+
+.svg-signal.yellow circle {
+    fill: rgba(255, 200, 87, 0.95);
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(255, 200, 87, 0.8)
+        );
+}
+
+
+/* =========================================================
+   TRAIN MARKERS
+   ========================================================= */
+
+.svg-train {
+    display: none;
+
+    pointer-events: none;
+
+    z-index: 20;
+}
+
+
+/* train body */
+
+.svg-train circle {
+    fill: #102832;
+
+    stroke: var(--cyan);
+
+    stroke-width: 3;
+
+    filter:
+        drop-shadow(
+            0 0 9px
+            rgba(40, 215, 255, 0.65)
+        );
+}
+
+
+/* train emoji */
+
+.train-icon {
+    font-size: 22px;
+}
+
+
+/* train ID background */
+
+.train-label-bg {
+    fill: #071218;
+
+    stroke: var(--cyan);
+
+    stroke-width: 1.5;
+}
+
+
+/* train ID */
+
+.train-label {
+    fill: #ffffff;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* JS adds this */
+
+.svg-train.moving {
+    display: block;
+}
+
+
+/* waiting train */
+
+.svg-train.waiting circle {
+    stroke: var(--yellow);
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(255, 200, 87, 0.8)
+        );
+
+    animation: waitingTrain 0.9s infinite alternate;
+}
+
+@keyframes waitingTrain {
+    from {
+        opacity: 0.65;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* collision */
+
+.svg-train.collision circle {
+    stroke: var(--red);
+
+    filter:
+        drop-shadow(
+            0 0 15px
+            rgba(255, 77, 90, 0.9)
+        );
+
+    animation: collisionTrain 0.35s infinite alternate;
+}
+
+@keyframes collisionTrain {
+    from {
+        transform: scale(0.92);
+    }
+
+    to {
+        transform: scale(1.08);
+    }
+}
+
+
+/* arrived */
+
+.svg-train.arrived {
+    display: none;
+}
+
+
+/* =========================================================
+   MAP STATUS BAR
+   ========================================================= */
+
+.map-status {
+    position: absolute;
+
+    left: 20px;
+    right: 20px;
+
+    top: 18px;
+
+    min-height: 38px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 8px 13px;
+
+    background: rgba(5, 12, 17, 0.9);
+
+    border: 1px solid #243a44;
+
+    border-radius: 8px;
+
+    backdrop-filter: blur(8px);
+
+    z-index: 50;
+
+    color: #91a9b2;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 0.4px;
+}
+
+.map-status span:first-child {
+    color: var(--green);
+}
+
+
+/* =========================================================
+   MAP DIALOGUE
+   ========================================================= */
+
+.map-dialogue {
+    position: absolute;
+
+    left: 50%;
+
+    top: 75px;
+
+    transform: translateX(-50%);
+
+    width: min(540px, 65%);
+
+    min-height: 78px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 13px 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(10, 28, 36, 0.97),
+            rgba(6, 17, 23, 0.97)
+        );
+
+    border: 1px solid rgba(40, 215, 255, 0.35);
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.45),
+        0 0 20px rgba(40,215,255,0.08);
+
+    backdrop-filter: blur(10px);
+
+    z-index: 60;
+
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.dialogue-icon {
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #10252e;
+
+    font-size: 21px;
+}
+
+.map-dialogue strong {
+    display: block;
+
+    color: #f3f9fb;
+
+    font-size: 14px;
+}
+
+.map-dialogue p {
+    margin-top: 4px;
+
+    color: #9ab0b9;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* dialogue states */
+
+.map-dialogue.success {
+    border-color: rgba(53, 229, 138, 0.5);
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.45),
+        0 0 22px rgba(53,229,138,0.1);
+}
+
+.map-dialogue.warning {
+    border-color: rgba(255, 200, 87, 0.55);
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.45),
+        0 0 22px rgba(255,200,87,0.1);
+}
+
+.map-dialogue.danger {
+    border-color: rgba(255, 77, 90, 0.65);
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.45),
+        0 0 25px rgba(255,77,90,0.16);
+}
+
+
+/* =========================================================
+   MAP EXPLANATION
+   ========================================================= */
+
+.map-explanation {
+    position: absolute;
+
+    left: 20px;
+
+    bottom: 18px;
+
+    width: 290px;
+
+    padding: 12px 14px;
+
+    background: rgba(5, 12, 17, 0.9);
+
+    border: 1px solid #263d47;
+
+    border-radius: 9px;
+
+    backdrop-filter: blur(8px);
+
+    z-index: 50;
+}
+
+.map-explanation strong {
+    display: block;
+
+    color: var(--cyan);
+
+    font-size: 10px;
+
+    letter-spacing: 0.8px;
+}
+
+.map-explanation span {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #91a8b1;
+
+    font-size: 10px;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   LOWER DASHBOARD
+   ========================================================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   TRAIN CARDS
+   ========================================================= */
+
+.train-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+    padding: 15px;
+}
+
+.train-card {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 13px;
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    transition:
+        border-color 0.25s ease,
+        background 0.25s ease;
+}
+
+.train-card:hover {
+    border-color: #31515e;
+}
+
+.train-card strong {
+    font-size: 13px;
+}
+
+.train-card span {
+    color: var(--text-muted);
+
+    font-size: 10px;
+}
+
+.train-card .train-state {
+    margin-top: 3px;
+
+    color: var(--cyan);
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.train-card.waiting {
+    border-color: rgba(255, 200, 87, 0.5);
+}
+
+.train-card.waiting .train-state {
+    color: var(--yellow);
+}
+
+.train-card.danger {
+    border-color: rgba(255, 77, 90, 0.55);
+}
+
+.train-card.danger .train-state {
+    color: var(--red);
+}
+
+.train-card.arrived {
+    border-color: rgba(53, 229, 138, 0.4);
+}
+
+.train-card.arrived .train-state {
+    color: var(--green);
+}
+
+
+/* =========================================================
+   SIGNAL CARDS
+   ========================================================= */
+
+.signal-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    gap: 9px;
+
+    padding: 15px;
+}
+
+.signal-card {
+    padding: 11px 8px;
+
+    text-align: center;
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+}
+
+.signal-card strong {
+    display: block;
+
+    font-size: 11px;
+}
+
+.signal-card .signal-state {
+    display: block;
+
+    margin-top: 5px;
+
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.signal-card.red .signal-state {
+    color: var(--red);
+}
+
+.signal-card.green .signal-state {
+    color: var(--green);
+}
+
+.signal-card.yellow .signal-state {
+    color: var(--yellow);
+}
+
+
+/* =========================================================
+   TRACK LIST
+   ========================================================= */
+
+.track-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    gap: 9px;
+
+    padding: 15px;
+}
+
+.track-card {
+    min-height: 90px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    padding: 11px;
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+}
+
+.track-card strong {
+    font-size: 11px;
+}
+
+.track-card span {
+    color: var(--text-muted);
+
+    font-size: 9px;
+}
+
+.track-card .track-status {
+    font-weight: 800;
+}
+
+.track-card.free .track-status {
+    color: #78909a;
+}
+
+.track-card.reserved {
+    border-color: rgba(255, 200, 87, 0.4);
+}
+
+.track-card.reserved .track-status {
+    color: var(--yellow);
+}
+
+.track-card.occupied {
+    border-color: rgba(53, 229, 138, 0.45);
+}
+
+.track-card.occupied .track-status {
+    color: var(--green);
+}
+
+.track-card.conflict {
+    border-color: rgba(255, 77, 90, 0.55);
+}
+
+.track-card.conflict .track-status {
+    color: var(--red);
+}
+
+
+/* =========================================================
+   EVENT LOG
+   ========================================================= */
+
+.event-list {
+    max-height: 330px;
+
+    overflow-y: auto;
+
+    padding: 10px 15px 15px;
+}
+
+.event-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.event-list::-webkit-scrollbar-thumb {
+    background: #2b434d;
+
+    border-radius: 10px;
+}
+
+.event-item {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 9px 4px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.event-item:last-child {
+    border-bottom: none;
+}
+
+.event-item strong {
+    color: var(--cyan);
+
+    font-size: 10px;
+}
+
+.event-item span {
+    color: #91a7b0;
+
+    font-size: 10px;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading {
+    padding: 20px;
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+    min-height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 20px 5%;
+
+    background: #061016;
+
+    border-top: 1px solid var(--border);
+
+    color: #718892;
+
+    font-size: 10px;
+}
+
+.footer strong {
+    color: #a9bcc3;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .metrics-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .track-list {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .signal-list {
+        grid-template-columns:
+            repeat(5, minmax(0, 1fr));
+    }
+
+    .railway-map {
+        height: 600px;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .topbar {
+        padding: 0 18px;
+    }
+
+    .system-status {
+        display: none;
+    }
+
+    .container {
+        width: 96%;
+    }
+
+    .control-bar {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .start-button {
+        width: 100%;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .railway-map {
+        height: 500px;
+    }
+
+    .map-dialogue {
+        width: 82%;
+
+        top: 70px;
+    }
+
+    .map-explanation {
+        width: 240px;
+    }
+
+    .track-list {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .train-list {
+        grid-template-columns: 1fr;
+    }
+
+    .track-list {
+        grid-template-columns: 1fr;
+    }
+
+    .signal-list {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .map-legend {
+        display: none;
+    }
+
+    .map-dialogue {
+        width: 90%;
+    }
+
+    .map-status {
+        left: 10px;
+        right: 10px;
+
+        gap: 8px;
+
+        font-size: 8px;
+    }
+
+    .map-explanation {
+        display: none;
+    }
+
+    .footer {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+}
+
+/* The full network remains available, but the selected lesson emphasises only
+   the small set of sections involved in its safety decision. */
+.svg-track.inactive { opacity: 0.16; }
+
+/* Scenario controls keep the teaching flow prominent without crowding the map. */
+.scenario-controls { display: flex; flex-direction: column; gap: 6px; min-width: 210px; }
+.scenario-controls label, .brief-kicker { color: var(--cyan); font-size: 9px; font-weight: 800; letter-spacing: 1px; }
+.scenario-controls select { padding: 10px 12px; color: var(--text); background: #0a1a21; border: 1px solid #31515e; border-radius: 7px; font: inherit; font-size: 12px; }
+.scenario-brief { margin: 0 0 20px; padding: 17px 20px; background: linear-gradient(100deg, rgba(40,215,255,.08), rgba(53,229,138,.035)); border: 1px solid rgba(40,215,255,.22); border-radius: 10px; }
+.scenario-brief strong { display: block; margin-top: 6px; font-size: 17px; }
+.scenario-brief p { margin: 6px 0 14px; color: var(--text-muted); font-size: 12px; }
+.brief-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.brief-grid span { display: grid; gap: 4px; padding-left: 10px; border-left: 2px solid var(--cyan); }
+.brief-grid b { font-size: 9px; color: var(--cyan); letter-spacing: .6px; }
+.brief-grid i { color: #b1c2c8; font-size: 11px; font-style: normal; line-height: 1.4; }
+.event-item small { color: #68808a; font-size: 9px; }
+
+/* The map dialogue replaces the duplicate summary cards above it. */
+.metrics-grid, .story-panel { display: none; }
+.concepts-panel { margin-bottom: 20px; }
+.concept-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--border); }
+.concept-list article { min-height: 112px; padding: 17px; background: var(--bg-card); }
+.concept-list strong { display: block; margin-bottom: 7px; color: var(--cyan); font-size: 12px; }
+.concept-list span { color: var(--text-muted); font-size: 11px; line-height: 1.5; }
+
+@media (max-width: 800px) { .concept-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 550px) { .concept-list { grid-template-columns: 1fr; } }
